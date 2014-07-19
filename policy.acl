@@ -1,0 +1,54 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1393374248000",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-west-2:185803495687:table/UserItems",
+        "arn:aws:dynamodb:us-west-2:185803495687:table/Users"
+      ]
+    },
+    {
+      "Sid": "Stmt1393374330000",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::ng-test-app/*"
+      ]
+    },
+    {
+      "Action":[
+        "sns:ListSubscriptions",
+        "sns:ListTopics",
+        "sns:Publish",
+        "sns:Subscribe"
+      ],
+      "Sid":"Stmt1383614467000",
+      "Resource":[
+        "arn:aws:sns:us-east-1:<ACCOUNT_ID>:upload_notifications"
+      ],
+      "Effect":"Allow"
+    },
+    {
+      "Action":[
+        "sqs:ReceiveMessage",
+        "sqs:SendMessage"
+      ],
+      "Sid":"Stmt1383648082000",
+      "Resource":[
+        "arn:aws:sqs:us-east-1:<ACCOUNT_ID>:UserCharges"
+      ],
+      "Effect":"Allow"
+    }
+  ]
+}
