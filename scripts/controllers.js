@@ -6,26 +6,26 @@ angular.module('myApp')
       .then(function(user) {
         $scope.user = user;
       });
-    }
+    };
 
     var getItemsForSale = function() {
       UserService.itemsForSale()
       .then(function(images) {
         $scope.images = images;
       });
-    }
+    };
 
     $scope.onFile = function(files) {
       UserService.uploadItemForSale(files)
       .then(function(data) {
         getItemsForSale();
       });
-    }
+    };
 
     $scope.sellImage = function(image) {
       $scope.showCC = true;
       $scope.currentItem = image;
-    }
+    };
 
     $scope.submitPayment = function() {
       UserService
@@ -33,7 +33,7 @@ angular.module('myApp')
       .then(function(data) {
         $scope.showCC = false;
       });
-    }
+    };
 
     getItemsForSale();
 });

@@ -101,19 +101,23 @@ angular.module('myApp.services', [])
     uploadItemForSale: function(items) {
       var d = $q.defer();
       service.currentUser().then(function(user) {
+        // Handle the upload
         AWSService.s3({
           params: {
             Bucket: service.Bucket
           }
         }).then(function(s3) {
+          // We have a handle of our s3 bucket in the s3 object
           var file = items[0]; // only one at a time
           var params = {
             Key: file.name,
             Body: file,
             ContentType: file.type
-          }
+          };
 
           s3.putObject(params, function(err, data) {
+            // The file has been uploaded
+            // or an error has occurred during the upload
             // Also, let's get a url
             var params = {
               Bucket: service.Bucket,
@@ -121,6 +125,7 @@ angular.module('myApp.services', [])
               Expires: 900*4 // 1 hour
             };
             s3.getSignedUrl('getObject', params, function (err, url) {
+              // now we have a url
               AWSService.dynamo({
                 params: {TableName: service.UserItemsTable}
               }).then(function(table) {
@@ -170,8 +175,7 @@ angular.module('myApp.services', [])
       });
       return d.promise;
     }
-  };
-
+  }
   return service;
 })
 .provider('AWSService', function() {
@@ -194,7 +198,7 @@ angular.module('myApp.services', [])
     if (logger) AWS.config.logger = logger;
   }
 
-  self.$get = function($q, $cacheFactory) {
+  self.$get = function($q, $cacheFactory, $window) {
     var s3Cache = $cacheFactory('s3Cache'),
         dynamoCache = $cacheFactory('dynamo'),
         snsCache = $cacheFactory('sns'),
@@ -207,6 +211,7 @@ angular.module('myApp.services', [])
         return credentialsPromise;
       },
       setToken: function(token, providerId) {
+        // Defaults to Google Provider if not explicity set I think
         var config = {
           RoleArn: self.arn,
           WebIdentityToken: token,

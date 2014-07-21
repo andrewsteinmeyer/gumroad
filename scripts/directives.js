@@ -1,5 +1,5 @@
 angular.module('myApp.directives', [])
-.directive('googleSignin', function() {
+.directive('googleSignin', function($window, $document) {
   return {
     restrict: 'A',
     template: '<span id="signinButton"></span>',
@@ -25,7 +25,7 @@ angular.module('myApp.directives', [])
 
       for (var i = 0; i < scopes.length; i++) {
         scopeUrls.push('https://www.googleapis.com/' + scopes[i]);
-      };
+      }
 
       // Create a custom callback method
       var callbackId = "_googleSigninCallback",
@@ -39,7 +39,7 @@ angular.module('myApp.directives', [])
       // Set standard google signin button settings
       attrs.$set('data-callback', callbackId);
       attrs.$set('data-cookiepolicy', 'single_host_origin');
-      attrs.$set('data-requestvisibleactions', 'http://schemas.google.com/AddActivity')
+      attrs.$set('data-requestvisibleactions', 'http://schemas.google.com/AddActivity');
       attrs.$set('data-scope', scopeUrls.join(' '));
 
       // Finally, reload the client library to
@@ -53,7 +53,7 @@ angular.module('myApp.directives', [])
        s.parentNode.insertBefore(po, s);
       })();
     }
-  }
+  };
 })
 .directive('fileUpload', function() {
   return {
@@ -67,9 +67,11 @@ angular.module('myApp.directives', [])
       ele.bind('change', function() {
         var file = ele[0].files;
         if (file) {
+          // binding the onFile method that is passed to the directive
+          // to the 'change' event so that it triggers when file is selected
           scope.fileUpload({files: file});
         }
-      })
+      });
     }
-  }
-})
+  };
+});
